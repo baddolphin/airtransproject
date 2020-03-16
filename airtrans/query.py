@@ -10,4 +10,4 @@ Seats.objects.all().filter(aircraft_code__seats_no='*')
 
 Boarding_passes.objects.all().filter(flight_id='202B')
 
-Tickets.objects.all().filter(passenger_name='*')
+Tickets.objects.all().filter(flight_id='242', passenger_name='*')

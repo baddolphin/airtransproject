@@ -109,5 +109,10 @@ class Seats(models.Model):
     fare_conditions = models.ForeignKey(Ticket_flights,
                                         on_delete=models.CASCADE)
 
+    def __str__(self):
+        return "{} - {}".format(self.aircraft_code,
+                                self.seat_no,
+                                self.fare_conditions)
+
 
 departure_airport__departure_code = 'LED'

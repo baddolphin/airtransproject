@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # Create your models here.
 
 
@@ -43,10 +44,11 @@ class Boarding_passes(models.Model):
     flight_id = models.ForeignKey('Flights',
                                   on_delete=models.CASCADE)
     boarding_no = models.CharField(max_length=3)
-    seat_no = models.CharField(max_length=3)
+    seat_no = models.ForeignKey('Seats',
+                                on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = (('ticket_no', 'flight_id'), )
+        unique_together = (('ticket_no', 'flight_id'),)
 
     def __str__(self):
         return "{} - {}".format(self.boarding_no,
@@ -77,7 +79,8 @@ class Flights(models.Model):
                                         related_name='arrival_airport',
                                         on_delete=models.CASCADE)
     status = models.CharField(max_length=20)
-    aircraft_code = models.CharField(max_length=3)
+    aircraft_code = models.ForeignKey('Aircrafts',
+                                      on_delete=models.CASCADE)
     actual_departure = models.DateTimeField()
     actual_arrival = models.DateTimeField()
 
@@ -87,6 +90,24 @@ class Flights(models.Model):
                                 self.scheduled_departure,
                                 self.arrival_airport,
                                 self.scheduled_arrival)
+
+
+class Aircrafts(models.Model):
+    aircraft_code = models.CharField(max_length=4, primary_key=True)
+    model = models.CharField(max_length=20)
+    range = models.PositiveIntegerField()
+
+    def __str__(self):
+        return "{} - {}".format(self.aircraft_code,
+                                self.model,
+                                self.range)
+
+
+class Seats(models.Model):
+    aircraft_code = models.ForeignKey(Aircrafts, on_delete=models.CASCADE)
+    seat_no = models.CharField(max_length=3, primary_key=True)
+    fare_conditions = models.ForeignKey(Ticket_flights,
+                                        on_delete=models.CASCADE)
 
 
 departure_airport__departure_code = 'LED'
